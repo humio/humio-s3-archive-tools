@@ -8,6 +8,16 @@ files that can be re-ingested using a tool like [Filebeat](https://docs.humio.co
 
 ## Pre-requisites
 
+### AWS S3 Credentials
+You'll need credentials to access the S3 bucket you're going to be
+interacting with. You can use the same credentials Humio is using to
+upload the S3 Archives if you like (they have GetObject, PutObject, and
+ListBucket permissions). Currently, the scripts only require GetObject
+and ListBucket privileges though, so if you'd prefer the scripts not
+have PutObject permissions that should work fine. An example IAM policy
+is available [here](https://docs.humio.com/cluster-management/storage-and-backup/s3-archiving/#iam-user-example-policy).
+Again, feel free to drop the PutObject permission if you desire.
+
 ### Install Ruby
 These scripts are written in Ruby. As such, you should have Ruby installed
 on the system you're running these scripts from. You can get more information
@@ -51,11 +61,11 @@ can set these easily by creating a `.env` file in the directory and pasting
 the following into it (changing the example values according to your what's
 needed for your own environment):
 
-```
+```env
 # the AWS region the S3 bucket you configured Humio to use for S3 Archives
 AWS_REGION="us-east-1"
 
-# an AWS Access Key ID that has read/list privileges
+# an AWS Access Key ID that has GetObject/ListBucket privileges
 AWS_ACCESS_KEY_ID="..."
 # the corresponding AWS Secret Access Key
 AWS_SECRET_ACCESS_KEY="..."
