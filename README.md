@@ -61,10 +61,10 @@ AWS_ACCESS_KEY_ID="..."
 AWS_SECRET_ACCESS_KEY="..."
 
 # the name of the S3 bucket you've configured the repository to archive to
-BUCKET_NAME="my-repo-archive"
+BUCKET_NAME="my-bucket-name"
 
 # the name of the Humio repository you're wanting to interact with archives for
-REPO_NAME="humio"
+REPO_NAME="my-repo-name"
 
 # the earliest timestamp you want to interact with. note that this is in terms
 # of the timestamp Humio has set on the S3 Archive files.
@@ -79,7 +79,7 @@ END_DATE="2019-10-06 00:00:00"
 Now that everything is ready to go, you can execute the script by running:
 
 ```
-bundle exec ruby fetch.rb
+bundle exec ruby scripts/fetch.rb
 ```
 
 Depending upon the timerange you've specified in `START_DATE` and `END_DATE`
@@ -98,11 +98,14 @@ the format:
 $REPO_$TAGNAME1-$TAGVALUE1_$TAGNAME2-$TAGVALUE2_..._$UNIXTIMESTAMP_$SEGMENTID.raw
 ```
 
-The `$UNIXTIMESTAMP` is the time of the first even in the file.
+The `$UNIXTIMESTAMP` is the time of the first even in the file. At this point
+you can use a tool like [Filebeat](https://docs.humio.com/integrations/data-shippers/beats/filebeat/)
+to re-ingest this data into Humio to search (or do whatever else you want with it).
 
 ## Troubleshooting
 There is a modicum of error handling in the script, but if you do run into
-an exception please report it to support@humio.com.
+an exception please [open an issue](https://github.com/humio/humio-s3-archive-tools/issues)
+on GitHub reporting it.
 
 If you'd like more verbose output while this is running add the following
 to your `.env` file:
