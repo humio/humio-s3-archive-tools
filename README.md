@@ -89,12 +89,14 @@ S3_BUCKET_NAME="my-bucket-name"
 REPO_NAME="my-repo-name"
 
 # the earliest timestamp you want to interact with. note that this is in terms
-# of the timestamp Humio has set on the S3 Archive files.
-START_DATE="2019-10-05 00:00:00"
+# of the timestamp Humio has set on the S3 Archive files. please use "YYYY-MM-DD HH:MM:SS"
+# in 24h format.
+START_DATE="2019-10-22 00:00:00"
 
 # the latest timestamp you want to interact with. note that this is in terms
-# of the timestamp Humio has set on the S3 Archive files.
-END_DATE="2019-10-06 00:00:00"
+# of the timestamp Humio has set on the S3 Archive files. please use "YYYY-MM-DD HH:MM:SS"
+# in 24h format.
+END_DATE="2019-10-23 00:00:00"
 ```
 
 ## Run the Script
