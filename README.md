@@ -61,7 +61,7 @@ can set these easily by creating a `.env` file in the directory and pasting
 the following into it (changing the example values according to your what's
 needed for your own environment):
 
-```
+```shell
 # if you're using an S3-compatible store, set the base URL here. you'll
 # want to comment out the `S3_REGION`. you'll likely also want to uncomment
 # the `S3_FORCE_PATH_STYLE` line below as well.
@@ -132,7 +132,7 @@ on GitHub reporting it.
 If you'd like more verbose output while this is running add the following
 to your `.env` file:
 
-```
+```shell
 DEBUG="1"
 ```
 
