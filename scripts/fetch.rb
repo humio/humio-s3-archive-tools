@@ -5,7 +5,7 @@ require 'aws-sdk-s3'
 require 'ndjson'
 
 errors = []
-required_vars = %w{AWS_REGION AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY BUCKET_NAME REPO_NAME START_DATE END_DATE}
+required_vars = %w{S3_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_BUCKET_NAME REPO_NAME START_DATE END_DATE}
 
 
 # If none of the required variables were passed in, assume the user doesn't know about
@@ -17,13 +17,13 @@ end
 if count == 0
   puts "ERR: The following environment variables are required:"
   puts
-  puts "             AWS_REGION - the AWS region your S3 bucket is in"
-  puts "      AWS_ACCESS_KEY_ID - the AWS access key id required to access your S3 bucket"
-  puts "  AWS_SECRET_ACCESS_KEY - the AWS secret access key required to access your S3 bucket"
-  puts "            BUCKET_NAME - the name of the S3 bucket"
-  puts "              REPO_NAME - the name of the repository you were archiving"
-  puts "             START_DATE - the earliest date you want to pull down files for. Use \"YYYY-MM-DD HH:MM:SS\" in 24h format."
-  puts "               END_DATE - the latest date you want to pull down files for. Use \"YYYY-MM-DD HH:MM:SS\" in 24h format."
+  puts "             S3_REGION - the region your S3 bucket is in"
+  puts "      S3_ACCESS_KEY_ID - the access key id required to access your S3 bucket"
+  puts "  S3_SECRET_ACCESS_KEY - the secret access key required to access your S3 bucket"
+  puts "        S3_BUCKET_NAME - the name of the S3 bucket"
+  puts "             REPO_NAME - the name of the repository you were archiving"
+  puts "            START_DATE - the earliest date you want to pull down files for. Use \"YYYY-MM-DD HH:MM:SS\" in 24h format."
+  puts "              END_DATE - the latest date you want to pull down files for. Use \"YYYY-MM-DD HH:MM:SS\" in 24h format."
   puts
   exit
 end
@@ -50,12 +50,30 @@ if errors.any?
   exit
 end
 
+# All S3 implementations need this
 Aws.config.update({
-  region: ENV['AWS_REGION'],
-  credentials: Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
+  credentials: Aws::Credentials.new(ENV['S3_ACCESS_KEY_ID'], ENV['S3_SECRET_ACCESS_KEY'])
 })
 
-bucket_name = ENV['BUCKET_NAME']
+if ENV['S3_REGION']
+  Aws.config.update({
+    region: ENV['S3_REGION']
+  })
+end
+
+if ENV['S3_ENDPOINT']
+  Aws.config.update({
+    endpoint: ENV['S3_ENDPOINT']
+  })
+end
+
+if ENV['S3_FORCE_PATH_STYLE']
+  Aws.config.update({
+    force_path_style: true
+  })
+end
+
+bucket_name = ENV['S3_BUCKET_NAME']
 repo_name   = ENV['REPO_NAME']
 start_date  = Time.parse(ENV['START_DATE'])
 end_date    = Time.parse(ENV['END_DATE'])

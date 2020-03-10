@@ -8,7 +8,7 @@ files that can be re-ingested using a tool like [Filebeat](https://docs.humio.co
 
 ## Pre-requisites
 
-### AWS S3 Credentials
+### S3 Credentials
 You'll need credentials to access the S3 bucket you're going to be
 interacting with. You can use the same credentials Humio is using to
 upload the S3 Archives if you like (they have GetObject, PutObject, and
@@ -61,17 +61,29 @@ can set these easily by creating a `.env` file in the directory and pasting
 the following into it (changing the example values according to your what's
 needed for your own environment):
 
-```env
-# the AWS region the S3 bucket you configured Humio to use for S3 Archives
-AWS_REGION="us-east-1"
+```
+# if you're using an S3-compatible store, set the base URL here. you'll
+# want to comment out the `S3_REGION`. you'll likely also want to uncomment
+# the `S3_FORCE_PATH_STYLE` line below as well.
+# S3_ENDPOINT="http://s3-compatible-system:8080"
 
-# an AWS Access Key ID that has GetObject/ListBucket privileges
-AWS_ACCESS_KEY_ID="..."
-# the corresponding AWS Secret Access Key
-AWS_SECRET_ACCESS_KEY="..."
+# if you're using an S3-compatible store, then you'll likely want to uncomment
+# this line. this forces the S3 client library to look for the bucket name in
+# the path rather than in the subdomain. comment this out to disable it.
+# S3_FORCE_PATH_STYLE="1"
+
+# the region the S3 bucket you configured Humio to use for S3 Archives.
+# if you're using an S3-compatible store aside from AWS S3, then you may
+# not need this.
+S3_REGION="us-east-1"
+
+# an Access Key ID that has GetObject/ListBucket privileges
+S3_ACCESS_KEY_ID="..."
+# the corresponding Secret Access Key
+S3_SECRET_ACCESS_KEY="..."
 
 # the name of the S3 bucket you've configured the repository to archive to
-BUCKET_NAME="my-bucket-name"
+S3_BUCKET_NAME="my-bucket-name"
 
 # the name of the Humio repository you're wanting to interact with archives for
 REPO_NAME="my-repo-name"
