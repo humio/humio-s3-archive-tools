@@ -122,7 +122,7 @@ the format:
 $REPO_$TAGNAME1-$TAGVALUE1_$TAGNAME2-$TAGVALUE2_..._$UNIXTIMESTAMP_$SEGMENTID.raw
 ```
 
-The `$UNIXTIMESTAMP` is the time of the first even in the file. At this point
+The `$UNIXTIMESTAMP` is the time of the first event in the file. At this point
 you can use a tool like [Filebeat](https://docs.humio.com/integrations/data-shippers/beats/filebeat/)
 to re-ingest this data into Humio to search (or do whatever else you want with it).
 
