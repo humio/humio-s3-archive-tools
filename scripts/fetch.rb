@@ -5,7 +5,7 @@ require 'aws-sdk-s3'
 require 'ndjson'
 
 errors = []
-required_vars = %w{S3_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_BUCKET_NAME REPO_NAME START_DATE END_DATE}
+required_vars = %w{S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_BUCKET_NAME REPO_NAME START_DATE END_DATE}
 
 
 # If none of the required variables were passed in, assume the user doesn't know about
@@ -36,6 +36,10 @@ required_vars.each do |v|
   end
 end
 
+if ENV['S3_ENDPOINT'].nil? && ENV['S3_REGION'].nil?
+  errors << "ERR: No s3 region specified. Please specify one using S3_REGION."
+end
+
 # Make sure the dates being passed in are in the correct format.
 if ENV['START_DATE'] !~ /[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/
   errors << "ERR: START_DATE in wrong format. Please use \"YYYY-MM-DD HH:MM:SS\" in 24h format."
@@ -54,6 +58,15 @@ end
 Aws.config.update({
   credentials: Aws::Credentials.new(ENV['S3_ACCESS_KEY_ID'], ENV['S3_SECRET_ACCESS_KEY'])
 })
+
+if ENV['DEBUG']
+  logger = Logger.new($stdout)
+  Aws.config.update({
+    log_level: :debug,
+    logger: logger,
+    http_wire_trace: true
+  })
+end
 
 if ENV['S3_REGION']
   Aws.config.update({
@@ -77,9 +90,6 @@ bucket_name = ENV['S3_BUCKET_NAME']
 repo_name   = ENV['REPO_NAME']
 start_date  = Time.parse(ENV['START_DATE'])
 end_date    = Time.parse(ENV['END_DATE'])
-
-s3 = Aws::S3::Resource.new
-bucket = s3.bucket(bucket_name)
 
 class S3FilenameParser
   attr_accessor :dataspace, :tags, :timestamp, :segment_id
